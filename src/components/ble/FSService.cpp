@@ -98,7 +98,7 @@ int FSService::FSCommandHandler(uint16_t connectionHandle, os_mbuf* om) {
         resp.totallen = info.size;
         fs.FileOpen(&f, filepath, LFS_O_RDONLY);
         fs.FileSeek(&f, header->chunkoff);
-        uint8_t fileData[resp.chunklen] = {0};
+        uint8_t fileData[resp.chunklen];// = {0};
         resp.chunklen = fs.FileRead(&f, fileData, resp.chunklen);
         om = ble_hs_mbuf_from_flat(&resp, sizeof(ReadResponse));
         os_mbuf_append(om, fileData, resp.chunklen);
@@ -128,7 +128,7 @@ int FSService::FSCommandHandler(uint16_t connectionHandle, os_mbuf* om) {
       }
       os_mbuf* om;
       if (resp.chunklen > 0) {
-        uint8_t fileData[resp.chunklen] = {0};
+        uint8_t fileData[resp.chunklen];// = {0};
         resp.chunklen = fs.FileRead(&f, fileData, resp.chunklen);
         om = ble_hs_mbuf_from_flat(&resp, sizeof(ReadResponse));
         os_mbuf_append(om, fileData, resp.chunklen);
@@ -191,7 +191,7 @@ int FSService::FSCommandHandler(uint16_t connectionHandle, os_mbuf* om) {
       NRF_LOG_INFO("[FS_S] -> Delete");
       auto* header = (DelHeader*) om->om_data;
       uint16_t plen = header->pathlen;
-      char path[plen + 1] = {0};
+      char path[plen + 1]; //= {0};
       memcpy(path, header->pathstr, plen);
       path[plen] = 0; // Copy and null terminate string
       DelResponse resp {};
@@ -206,7 +206,7 @@ int FSService::FSCommandHandler(uint16_t connectionHandle, os_mbuf* om) {
       NRF_LOG_INFO("[FS_S] -> MKDir");
       auto* header = (MKDirHeader*) om->om_data;
       uint16_t plen = header->pathlen;
-      char path[plen + 1] = {0};
+      char path[plen + 1];// = {0};
       memcpy(path, header->pathstr, plen);
       path[plen] = 0; // Copy and null terminate string
       MKDirResponse resp {};
@@ -222,7 +222,7 @@ int FSService::FSCommandHandler(uint16_t connectionHandle, os_mbuf* om) {
       NRF_LOG_INFO("[FS_S] -> ListDir");
       ListDirHeader* header = (ListDirHeader*) om->om_data;
       uint16_t plen = header->pathlen;
-      char path[plen + 1] = {0};
+      char path[plen + 1];// = {0};
       path[plen] = 0; // Copy and null terminate string
       memcpy(path, header->pathstr, plen);
 
@@ -288,7 +288,7 @@ int FSService::FSCommandHandler(uint16_t connectionHandle, os_mbuf* om) {
       uint16_t plen = header->OldPathLength;
       // Null Terminate string
       header->pathstr[plen] = 0;
-      char path[header->NewPathLength + 1] = {0};
+      char path[header->NewPathLength + 1];// = {0};
       memcpy(path, &header->pathstr[plen + 1], header->NewPathLength);
       path[header->NewPathLength] = 0; // Copy and null terminate string
       MoveResponse resp {};
