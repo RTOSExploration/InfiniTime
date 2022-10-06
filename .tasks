@@ -1,0 +1,41 @@
+[+]
+LLVM_DIR=/usr/lib/llvm-14
+NRF5_SDK_PATH=<root>/src/nRF5_SDK_15.3.0_59ac345
+ARM_NONE_EABI_TOOLCHAIN_PATH=<root>/../gcc-arm-none-eabi-10.3-2021.10
+
+[project-init:debug]
+command=rm -rf build && mkdir build && cd build && cmake -DARM_NONE_EABI_TOOLCHAIN_PATH=$(+ARM_NONE_EABI_TOOLCHAIN_PATH) -DNRF5_SDK_PATH=$(+NRF5_SDK_PATH) -DCMAKE_BUILD_TYPE=Debug ..
+cwd=<root>
+errorformat=
+save=2
+
+[project-init:release]
+command=rm -rf build && mkdir build && cd build && cmake -DARM_NONE_EABI_TOOLCHAIN_PATH=$(+ARM_NONE_EABI_TOOLCHAIN_PATH) -DNRF5_SDK_PATH=$(+NRF5_SDK_PATH) ..
+cwd=<root>
+errorformat=
+save=2
+
+[project-build]
+command=LLVM_COMPILER=clang LLVM_COMPILER_PATH=$(+LLVM_DIR)/bin BINUTILS_TARGET_PREFIX=$(+ARM_NONE_EABI_TOOLCHAIN_PATH)/bin/arm-none-eabi cmake --build build -j && extract-bc --link $(+LLVM_DIR)/bin/llvm-link build/src/pinetime-app-1.10.0.out && $(+LLVM_DIR)/bin/llvm-dis build/src/pinetime-app-1.10.0.out.bc
+cwd=<root>
+errorformat=%f:%l:%m
+save=2
+
+#[project-run]
+#command=
+#cwd=<root>
+#output=terminal
+#pos=TAB
+#save=2
+## exec :checktime when task finishes
+#notify=:checktime
+
+[grep-word]
+command=rg -n --no-heading --color never --no-ignore "$(?keyword)" "<root>" -tc -tcpp -tpy -tvim -tgo
+cwd=$(VIM_ROOT)
+errorformat=%f:%l:%m
+
+[grep-cword]
+command=rg -n --no-heading --color never --no-ignore "$(VIM_CWORD)" "<root>" -tc -tcpp -tpy -tvim -tgo
+cwd=$(VIM_ROOT)
+errorformat=%f:%l:%m
