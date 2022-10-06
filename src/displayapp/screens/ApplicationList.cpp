@@ -7,6 +7,7 @@
 using namespace Pinetime::Applications::Screens;
 
 constexpr std::array<Tile::Applications, ApplicationList::applications.size()> ApplicationList::applications;
+constexpr int ApplicationList::nScreens;
 
 auto ApplicationList::CreateScreenList() const {
   std::array<std::function<std::unique_ptr<Screen>()>, nScreens> screens;
