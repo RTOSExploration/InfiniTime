@@ -5,19 +5,19 @@ ARM_NONE_EABI_TOOLCHAIN_PATH=<root>/../gcc-arm-none-eabi-10.3-2021.10
 PYTHON_VENV=<root>/.venv/bin/activate
 
 [project-init:debug]
-command=rm -rf build && mkdir build && cd build && cmake -DARM_NONE_EABI_TOOLCHAIN_PATH=$(+ARM_NONE_EABI_TOOLCHAIN_PATH) -DNRF5_SDK_PATH=$(+NRF5_SDK_PATH) -DCMAKE_BUILD_TYPE=Debug ..
+command=rm -rf build && mkdir build && cd build && cmake -GNinja -DARM_NONE_EABI_TOOLCHAIN_PATH=$(+ARM_NONE_EABI_TOOLCHAIN_PATH) -DNRF5_SDK_PATH=$(+NRF5_SDK_PATH) -DCMAKE_BUILD_TYPE=Debug ..
 cwd=<root>
 errorformat=
 save=2
 
 [project-init:release]
-command=rm -rf build && mkdir build && cd build && cmake -DARM_NONE_EABI_TOOLCHAIN_PATH=$(+ARM_NONE_EABI_TOOLCHAIN_PATH) -DNRF5_SDK_PATH=$(+NRF5_SDK_PATH) ..
+command=rm -rf build && mkdir build && cd build && cmake -GNinja -DARM_NONE_EABI_TOOLCHAIN_PATH=$(+ARM_NONE_EABI_TOOLCHAIN_PATH) -DNRF5_SDK_PATH=$(+NRF5_SDK_PATH) ..
 cwd=<root>
 errorformat=
 save=2
 
 [project-build]
-command=source $(+PYTHON_VENV) && export WLLVM_OUTPUT_LEVEL=WARNING LLVM_COMPILER=clang LLVM_COMPILER_PATH=$(+LLVM_DIR)/bin BINUTILS_TARGET_PREFIX=$(+ARM_NONE_EABI_TOOLCHAIN_PATH)/bin/arm-none-eabi && cmake --build build -j$(nproc) --target pinetime-app && extract-bc build/src/pinetime-app-1.10.0.out && $(+LLVM_DIR)/bin/llvm-dis build/src/pinetime-app-1.10.0.out.bc
+command=source $(+PYTHON_VENV) && export WLLVM_OUTPUT_LEVEL=WARNING LLVM_COMPILER=hybrid LLVM_COMPILER_PATH=$(+LLVM_DIR)/bin BINUTILS_TARGET_PREFIX=$(+ARM_NONE_EABI_TOOLCHAIN_PATH)/bin/arm-none-eabi && cmake --build build -j$(nproc) --target pinetime-app && extract-bc build/src/pinetime-app-1.10.0.out && $(+LLVM_DIR)/bin/llvm-dis build/src/pinetime-app-1.10.0.out.bc
 cwd=<root>
 errorformat=%f:%l:%m
 save=2
