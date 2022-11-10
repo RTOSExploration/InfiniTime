@@ -1,7 +1,7 @@
 [+]
 LLVM_DIR=/usr/lib/llvm-14
 NRF5_SDK_PATH=<root>/src/nRF5_SDK_15.3.0_59ac345
-ARM_NONE_EABI_TOOLCHAIN_PATH=<root>/../gcc-arm-none-eabi-10.3-2021.10
+ARM_NONE_EABI_TOOLCHAIN_PATH=$HOME/purs3/gcc-arm-none-eabi-10.3-2021.10
 PYTHON_VENV=<root>/.venv/bin/activate
 
 [project-init:debug]
@@ -17,7 +17,7 @@ errorformat=
 save=2
 
 [project-build]
-command=source $(+PYTHON_VENV) && export WLLVM_OUTPUT_LEVEL=WARNING LLVM_COMPILER=hybrid LLVM_COMPILER_PATH=$(+LLVM_DIR)/bin BINUTILS_TARGET_PREFIX=$(+ARM_NONE_EABI_TOOLCHAIN_PATH)/bin/arm-none-eabi && cmake --build build -j$(nproc) --target pinetime-app && extract-bc build/src/pinetime-app-1.10.0.out && $(+LLVM_DIR)/bin/llvm-dis build/src/pinetime-app-1.10.0.out.bc
+command=. $(+PYTHON_VENV) && export WLLVM_OUTPUT_LEVEL=INFO LLVM_COMPILER=hybrid LLVM_COMPILER_PATH=$(+LLVM_DIR)/bin BINUTILS_TARGET_PREFIX=$(+ARM_NONE_EABI_TOOLCHAIN_PATH)/bin/arm-none-eabi && cmake --build build -j$(nproc) --target pinetime-app && extract-bc build/src/pinetime-app-1.10.0.out && $(+LLVM_DIR)/bin/llvm-dis build/src/pinetime-app-1.10.0.out.bc
 cwd=<root>
 errorformat=%f:%l:%m
 save=2
